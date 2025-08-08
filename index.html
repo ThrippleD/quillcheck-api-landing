@@ -2,98 +2,286 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>QuillCheck Integration – NALH Social Radar</title>
-  <meta name="description" content="Demo landing page for integrating QuillCheck API into a real-time meme coin risk & honeypot detection tool." />
-  <meta name="theme-color" content="#0ea5e9" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NALH Social Radar × QuillCheck API</title>
+  <meta name="description" content="Real-time scam detection, risk scoring, market info, and code reports for Solana meme coins using QuillCheck API." />
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root{
-      --bg:#0b0f16; --card:#111827; --muted:#8b9bb4; --text:#e5eef7; --brand:#38bdf8; --ok:#22c55e; --warn:#f59e0b;
+      --bg:#0b0f14;
+      --panel:#11161d;
+      --card:#0f141b;
+      --muted:#aab3c2;
+      --text:#e9eef7;
+      --brand:#42e3cc;      /* teal */
+      --accent:#9b6cff;     /* purple */
+      --danger:#ff5b7a;     /* pink/red */
+      --ok:#4ade80;         /* green */
       --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 18px;
+      --glass: rgba(17,22,29,.65);
+      --border: rgba(255,255,255,.08);
+      --pill:#0d1218;
+      --pill-b:#1a2230;
+      --badge:#0f1723;
+      --ring: 0 0 0 1px var(--border), inset 0 0 0 1px rgba(255,255,255,.03);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial;
-      background:
-        radial-gradient(1200px 600px at 80% -20%, #0a1628 0%, transparent 60%),
-        radial-gradient(900px 500px at 0% 100%, #071322 0%, transparent 60%),
-        linear-gradient(180deg, #0b0f16, #0b0f16);
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
       color:var(--text);
-      display:flex; align-items:center; justify-content:center; padding:32px;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #1c2432 0, transparent 60%),
+        radial-gradient(1200px 700px at 110% 110%, #191f2a 0, transparent 55%),
+        linear-gradient(180deg, #0a0e13 0%, #0b1016 100%);
+      background-color:var(--bg);
+      letter-spacing:.2px;
     }
-    .wrap{width:100%; max-width:980px}
-    .hero{
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)), var(--card);
-      border:1px solid rgba(255,255,255,.06);
-      box-shadow:var(--shadow);
-      border-radius:var(--radius);
-      padding:34px 30px;
+    .wrap{
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding:64px 20px;
     }
-    .badge{display:inline-flex; gap:8px; align-items:center; color:var(--brand); font-weight:600; letter-spacing:.3px; font-size:14px}
-    .title{font-size:clamp(28px, 4vw, 44px); margin:10px 0 8px}
-    .subtitle{color:var(--muted); line-height:1.6; margin:0 0 20px}
-    .grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:22px 0 10px}
     .card{
-      background:#0f1729bd; border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:14px 16px; min-height:88px
+      width:min(980px, 100%);
+      background:var(--glass);
+      backdrop-filter: blur(14px) saturate(125%);
+      border:1px solid var(--border);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
     }
-    .card b{display:block; margin-bottom:6px; color:#cfe9ff}
+    .card::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background:
+        radial-gradient(240px 140px at 20% 0%, rgba(66,227,204,.18), transparent 60%),
+        radial-gradient(240px 140px at 80% 0%, rgba(155,108,255,.16), transparent 60%);
+      pointer-events:none;
+    }
+    .hd{
+      display:flex; align-items:center; gap:10px;
+      padding:18px 22px;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      font-weight:600; color:#b9c5d9; font-size:13px;
+    }
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--brand); box-shadow:0 0 10px var(--brand);}
+    .main{
+      padding:32px clamp(18px, 3.5vw, 40px) 36px;
+    }
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(26px, 4.4vw, 40px);
+      line-height:1.05;
+      letter-spacing:.3px;
+    }
+    .subtitle{
+      margin:0 0 26px;
+      color:var(--muted);
+      max-width:62ch;
+      font-size:15px;
+    }
+    .chips{
+      display:flex; flex-wrap:wrap; gap:12px;
+      margin:22px 0 28px;
+    }
+    .chip{
+      display:flex; align-items:center; gap:10px;
+      padding:14px 16px;
+      background:var(--badge);
+      border:1px solid var(--border);
+      border-radius:14px;
+      box-shadow: var(--ring);
+      min-width:230px;
+    }
+    .chip .ico{
+      width:22px;height:22px; display:grid; place-items:center;
+      border-radius:8px; background:#0c131b; border:1px solid var(--border);
+    }
+    .chip b{font-weight:700}
+    .chip small{display:block; color:var(--muted); margin-top:2px; font-size:12px}
+    .row{
+      display:flex; flex-wrap:wrap; gap:12px;
+      margin: 6px 0 18px;
+    }
     .pill{
-      display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px;
-      background:linear-gradient(90deg, #06b6d4, #3b82f6, #a855f7); background-size:200% 100%;
-      transition:transform .15s ease, background-position .8s ease; color:#fff; font-weight:700; text-decoration:none
+      background:var(--pill);
+      border:1px solid var(--pill-b);
+      color:#cfd7e6;
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:12px;
+      display:inline-flex; align-items:center; gap:8px;
     }
-    .pill:hover{transform:translateY(-1px); background-position:100% 0}
-    .row{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
-    .muted{color:var(--muted); font-size:14px}
-    .footer{
-      text-align:center; margin-top:14px; color:#9fb3cc; font-size:13px
+    .pill.ok{border-color:rgba(74,222,128,.3); color:#bdf9d0}
+    .pill.stage{border-color:rgba(155,108,255,.35); color:#dbc9ff}
+    .pill.lat{border-color:rgba(66,227,204,.35); color:#bff5ec}
+    .btns{display:flex;flex-wrap:wrap; gap:12px; margin-top:8px}
+    .btn{
+      appearance:none; border:1px solid var(--border);
+      background: linear-gradient(180deg,#111a24, #0d141c);
+      color:var(--text);
+      padding:12px 16px; border-radius:12px;
+      font-weight:600; cursor:pointer;
+      transition:.15s transform, .15s filter, .15s opacity;
+      box-shadow: var(--ring);
     }
-    .ribbon{
-      display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border:1px dashed rgba(255,255,255,.16);
-      border-radius:10px; background:rgba(14,165,233,.08); color:#bfe7ff; font-size:13px
+    .btn.primary{
+      background:linear-gradient(135deg, var(--brand), var(--accent));
+      color:#0b0f14; border-color:transparent;
+      text-shadow:0 1px 0 rgba(255,255,255,.25);
     }
-    .kpis{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
-    .kpi{background:#0d1423; border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:10px 12px; font-size:14px}
-    .ok{color:var(--ok)} .warn{color:var(--warn)}
-    @media (max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:520px){.grid{grid-template-columns:1fr}}
+    .btn[disabled]{opacity:.6; cursor:not-allowed}
+    .note{
+      margin-top:12px;
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; color:#b7c2d6;
+      background:#0e1520; border:1px dashed var(--border);
+      padding:8px 10px; border-radius:10px;
+    }
+    footer{
+      padding:18px 22px 22px; color:#8fa2be; font-size:12px;
+      border-top:1px solid var(--border);
+      display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    }
+    a{color:var(--brand); text-decoration:none}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:10px; font-size:12px;
+      background:#0f1723; border:1px solid var(--border);
+    }
+    .ring{width:8px;height:8px;border-radius:50%; background:var(--ok); box-shadow:0 0 8px var(--ok);}
+    .code{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace}
+    @media (max-width:560px){
+      .chip{min-width:unset; flex:1}
+    }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="hero">
-      <div class="badge">🔍 QuillCheck Integration</div>
-      <h1 class="title">NALH Social Radar × QuillCheck API</h1>
-      <p class="subtitle">
-        Real-time <b>honeypot detection</b>, <b>risk scoring</b> و <b>code reports</b> برای میم‌کوین‌های سولانا.
-        این صفحه صرفاً دمو/لندینگ فنی است تا هدف استفاده از API را نشان دهد.
-      </p>
+  <div class="wrap">
+    <section class="card" aria-labelledby="title">
+      <header class="hd">
+        <span class="dot" aria-hidden="true"></span>
+        <span>QuillCheck Integration</span>
+      </header>
 
-      <div class="grid">
-        <div class="card"><b>Honeypots Detection</b><span class="muted">تشخیص قراردادهای قفل‌گیر و رگ‌پول‌های رایج</span></div>
-        <div class="card"><b>Risk Scores</b><span class="muted">اسکور ریسک قابل مصرف در فیلترهای اختصاصی</span></div>
-        <div class="card"><b>Market Info</b><span class="muted">متادیتا/سیگنال‌های مکمل برای استراتژی</span></div>
-        <div class="card"><b>Code Report</b><span class="muted">خلاصه تحلیل استاتیک قرارداد و پرچم‌های خطر</span></div>
+      <div class="main">
+        <h1 id="title">NALH Social Radar × QuillCheck API</h1>
+        <p class="subtitle">
+          Real-time <b>scam detection</b>, <b>risk scoring</b>, <b>market info</b>, and <b>code reports</b> for Solana meme coins.  
+          This page is a compact dev/verification landing to demonstrate API usage intent.
+        </p>
+
+        <div class="chips">
+          <!-- Scam Detection -->
+          <div class="chip">
+            <span class="ico" aria-hidden="true">
+              <!-- Shield icon -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3l7 3v6c0 4.418-3.134 8.418-7 9-3.866-.582-7-4.582-7-9V6l7-3z" stroke="rgba(255,255,255,.8)" stroke-width="1.6"/>
+                <path d="M9 12l2 2 4-4" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <div>
+              <b>Scam Detection</b>
+              <small>Detect honeypots, rug patterns & malicious contracts.</small>
+            </div>
+          </div>
+
+          <!-- Risk Scores -->
+          <div class="chip">
+            <span class="ico" aria-hidden="true">
+              <!-- Gauge icon -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M4 13a8 8 0 1116 0" stroke="rgba(255,255,255,.8)" stroke-width="1.6"/>
+                <path d="M12 13l5-5" stroke="#ffd166" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="12" cy="13" r="2" fill="#ffd166"/>
+              </svg>
+            </span>
+            <div>
+              <b>Risk Scores</b>
+              <small>Opinionated risk indexes for custom filtering.</small>
+            </div>
+          </div>
+
+          <!-- Market Info -->
+          <div class="chip">
+            <span class="ico" aria-hidden="true">
+              <!-- Chart icon -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M4 19h16M7 16V8m5 8V5m5 11v-6" stroke="rgba(255,255,255,.8)" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <div>
+              <b>Market Info</b>
+              <small>Signals/metadata for strategy pipelines.</small>
+            </div>
+          </div>
+
+          <!-- Code Report -->
+          <div class="chip">
+            <span class="ico" aria-hidden="true">
+              <!-- Code icon -->
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 7l-2 10" stroke="rgba(255,255,255,.8)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <div>
+              <b>Code Report</b>
+              <small>Static analysis summary & risk flags.</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <span class="pill ok"><span class="ring"></span> Status: <b>Active (Dev)</b></span>
+          <span class="pill stage">Stage: <b>Private Sandbox</b></span>
+          <span class="pill lat">Latency target: <b>&lt; 300ms</b></span>
+        </div>
+
+        <div class="btns">
+          <button class="btn primary" disabled title="Coming soon">Sign in (coming soon)</button>
+          <a class="btn" href="https://quillainetwork.gitbook.io/quillcheck" target="_blank" rel="noreferrer">API Docs</a>
+        </div>
+
+        <div class="note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,.35)"/>
+            <path d="M12 7v6m0 4h.01" stroke="#ffd166" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span>Under development — private testing only. Production keys will be scoped & rate-limited.</span>
+        </div>
       </div>
 
-      <div class="kpis">
-        <div class="kpi">Status: <b class="ok">Active (Dev)</b></div>
-        <div class="kpi">Stage: <b>Private Sandbox</b></div>
-        <div class="kpi">Latency target: <b>&lt; 300ms</b></div>
-      </div>
-
-      <div class="row">
-        <a class="pill" href="#" onclick="alert('Login coming soon – private dev build.');return false;">Sign in (coming soon)</a>
-        <span class="ribbon">🚧 Under development – private testing only</span>
-      </div>
+      <footer>
+        <div>Contact: <a href="https://t.me/NeoAion102128" target="_blank" rel="noreferrer">@NeoAion102128</a> &nbsp;•&nbsp;
+          Email: <a href="mailto:wg.ccs28@gmail.com" class="code">wg.ccs28@gmail.com</a>
+        </div>
+        <div class="badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="opacity:.9">
+            <path d="M12 3l7 3v6c0 4.418-3.134 8.418-7 9-3.866-.582-7-4.582-7-9V6l7-3z" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/>
+          </svg>
+          NALH Social Radar
+        </div>
+      </footer>
     </section>
+  </div>
 
-    <p class="footer">
-      Contact: <a href="https://t.me/NeoAion102128" target="_blank" rel="noopener" style="color:#7dd3fc;text-decoration:none;">@NeoAion102128</a> ·
-      Email: <a href="mailto:wg.ccs28@gmail.com" style="color:#7dd3fc;text-decoration:none;">wg.ccs28@gmail.com</a>
-    </p>
-  </main>
+  <script>
+    // (Optional) Tiny flourish: fake “ping” update on hover
+    // Keeps page static but feels alive—no external calls.
+    const lat = document.querySelector('.pill.lat b');
+    let base = 240;
+    function jitter(v=base){ return Math.max(160, Math.min(340, Math.round(v + (Math.random()*40-20)))); }
+    document.addEventListener('visibilitychange',()=>{ base = jitter(); lat.textContent = `< ${base}ms`; });
+  </script>
 </body>
 </html>
